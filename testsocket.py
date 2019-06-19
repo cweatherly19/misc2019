@@ -1,11 +1,6 @@
 # first of all import the socket library
 import socket
-
-c = 0
-x = 0
-y = 0
-z = 0
-
+import pickle
 
 # next create a socket object
 s = socket.socket()
@@ -39,23 +34,8 @@ print 'Got connection from', addr
 c.send('Thank you for connecting')
 m = c.recv(70)
 
+input = pickle.loads(m)
+print input
+
 # Close the connection with the client
 c.close()
-
-
-m = " %s " % m
-print m
-
-m.split(' ')
-for i in s.split(' '):
-    c += 1
-    if c == 1:
-        x = int(i)
-    if c == 2:
-        y = int(i)
-    if c == 3:
-        z = int(i)
-
-print "x: %d " % x
-print "y: %d " % y
-print "z: %d " % z
