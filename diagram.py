@@ -106,7 +106,7 @@ def pos(x, y, z):
     return x_change, y_change, z_change
 
 
-s.connect(('127.0.0.1', port))
+s.connect(('192.168.21.135', port))
 
 while not done:
     clock.tick(60)
