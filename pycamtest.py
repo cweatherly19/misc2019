@@ -9,8 +9,7 @@ pygame.init()
 pygame.camera.init()
 
 #create fullscreen display 640x480
-screen = pygame.display.set_mode((128,96),0)
-screen_two = pygame.display.set_mode((128,96),0)
+screen = pygame.display.set_mode((256,96),0)
 
 #find, open and start low-res camera
 cam_list = pygame.camera.list_cameras()
@@ -27,7 +26,7 @@ while True:
     imaget = pygame.transform.scale(imaget,(128,96))
     
     screen.blit(imagen,(0,0))
-    screen_two.blit(imaget,(0,0))
+    screen.blit(imaget,(129,0))
     
     #draw all updates to display
     pygame.display.update()
