@@ -9,19 +9,26 @@ pygame.init()
 pygame.camera.init()
 
 #create fullscreen display 640x480
-screen = pygame.display.set_mode((640,480),0)
+screen = pygame.display.set_mode((128,96),0)
+screen_two = pygame.display.set_mode((128,96),0)
 
 #find, open and start low-res camera
 cam_list = pygame.camera.list_cameras()
 webcam = pygame.camera.Camera(cam_list[0],(64,48))
+webcam_two = pygame.camera.Camera(cam_list[1], (64,48))
 webcam.start()
+webcam_two.start()
 
 while True:
     #grab image, scale and blit to screen
     imagen = webcam.get_image()
-    imagen = pygame.transform.scale(imagen,(640,480))
+    imagen = pygame.transform.scale(imagen,(128,96))
+    imaget = webcam_two.get_image()
+    imaget = pygame.transform.scale(imaget,(128,96))
+    
     screen.blit(imagen,(0,0))
-
+    screen_two.blit(imaget,(0,0))
+    
     #draw all updates to display
     pygame.display.update()
 
@@ -29,5 +36,6 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             webcam.stop()
+            webcam_two.stop()
             pygame.quit()
             sys.exit()
