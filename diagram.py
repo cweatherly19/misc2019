@@ -51,6 +51,7 @@ xyz = [x, y, z]
 
 
 done = False
+connect = True
 # ^^^ that all would be the setup
 
 
@@ -105,8 +106,15 @@ def pos(x, y, z):
 
     return x_change, y_change, z_change
 
+try:
+    s.connect(('192.168.21.135', port))
+except:
+    try:
+        s.connect(('127.0.0.1', port))
+    except:
+        print("No connection")
+        connect = False
 
-s.connect(('192.168.21.135', port))
 
 while not done:
     clock.tick(60)
@@ -158,11 +166,11 @@ while not done:
     else: # out of range so stay
         pygame.draw.lines(screen, black, False, [[originx,originy], [xe, ye], [xo, yo]], 5)
         pygame.draw.circle(screen, pink, (x + originx, originy - y), (5), 0)
-
-    xyz = [xo, yo, zo]
-    data = pickle.dumps(xyz, protocol=2)
-    #output = 'Thank you for connecting'
-    s.sendall(data)
+    if connect == True:
+        xyz = [xo, yo, zo]
+        data = pickle.dumps(xyz, protocol=2)
+        #output = 'Thank you for connecting'
+        s.sendall(data)
     #s.send(xyz)
 
 # Be IDLE friendly
