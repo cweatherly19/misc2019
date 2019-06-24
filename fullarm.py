@@ -96,7 +96,7 @@ def pos(x, y, z):
     gopen = 1
     gclose = 1
     wup = 1
-    wclose = 1
+    wdown = 1
 
     if event.type == pygame.KEYDOWN:
         # what key are they pressing? move accordingly
@@ -145,7 +145,7 @@ while not done:
             done=True # Flag that we are done so we exit this loop
         else: # did something other than close
             try:
-                x_change, y_change, z_change, gopen, gclose, wup, wclose = pos(x,y,z) # figure out the change
+                x_change, y_change, z_change, gopen, gclose, wup, wdown = pos(x,y,z) # figure out the change
             except:
                 done = True
 
