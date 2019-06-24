@@ -170,7 +170,7 @@ while not done:
         pygame.draw.lines(screen, black, False, [[originx,originy], [xe, ye], [xo, yo]], 5)
         pygame.draw.circle(screen, pink, (x + originx, originy - y), (5), 0)
     if connect == True:
-        xyz = [xo, yo, zo]
+        xyz = [x, y, z]
         data = pickle.dumps(xyz, protocol=2)
         #output = 'Thank you for connecting'
         s.sendall(data)

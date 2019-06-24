@@ -1,8 +1,8 @@
 d_one = 62.0 #distance from shoulder to elbow
 d_two = 48.0 #distance from elbow to wrist
 
-x = 0.0 #starting x value
-y = 110.0 #starting y value
+x = d_two #starting x value
+y = d_one #starting y value
 z = 0.0 #starting z value
 speed = 1 #starting speed (whole number between 1 and 4)
 
@@ -43,9 +43,9 @@ try: #if not connected to a RoboPi, it can still run
     shoulder_motor_speed = 500
 
     distance_of_error = 3 #max distance arm can be away from intended point
-    
+
     max_error = distance_of_error / math.sqrt(3) #to convert the error to the intiger unit of measurement
-    
+
     shoulder_range = 840 #range of read value for the shoulder POT
     elbow_range = 775 #range of read value for the elbow POT
     swivel_range = 800 #(NUMBER HERE: NEED TO FIND POT AND ITS RANGE FOR THIS) #range of read value for the swivel POT
@@ -76,7 +76,7 @@ try: #if not connected to a RoboPi, it can still run
 except:
     print 'Motors unrunnable: unable to reach RoboPiLib_pwm'
 
-    
+
 import socket
 import pickle
 
@@ -91,7 +91,7 @@ print "socket is listening"
 c, addr = s.accept()
 print 'Got connection from', addr
 c.send('Thank you for connecting')
-    
+
 def key_reader():
     xyz = c.recv(5000)
     input = pickle.loads(xyz)
@@ -100,19 +100,30 @@ def key_reader():
     z = int(input[2])
     print input
     return x, y, z
-   
+
 
 def motor_runner(x, y, z): #sends signals to all the motors based on potentiometer readings
+    sqd_one = d_one ** 2
+    sqd_two = d_two ** 2
+    d_three = math.sqrt((y**2) + (x**2))
+    a_elbow = math.acos((sqd_one + sqd_two - ((y**2) + (x ** 2))) / (2 * d_one * d_two))
+    a_two = math.asin((d_two * math.sin(a_elbow) / d_three)) # angle between shoulder and wrist
+    a_four = math.atan2(y , x) # angle between 0 line and wrist
+    a_shoulder = round((a_four + a_two),4)  # shoulder angle
 
     reach_length = math.sqrt(x ** 2 + y ** 2 + z ** 2) #the momentary length of the arm
 
-    elbow_value = math.acos((d_one ** 2 + d_two ** 2 - reach_length ** 2) / (2 * d_one * d_two)) #the actual value of the elbow angle
-    a_elbow = round(abs(elbow_value - math.pi), 4) #the converted angle of the elbow
-    a_shoulder = round(math.asin(d_two * math.sin(elbow_value) / reach_length) + math.asin(y / reach_length), 4) #the shoulder angle
-    try:
-        a_swivel = round(math.asin(z / math.sqrt(x ** 2 + z ** 2)) + math.pi / 2, 4) #the swivel angle
-    except:
-        a_swivel = math.pi / 2 #the swivel angle when its angle doesn't matter
+#    a_elbow = round(abs(elbow_value - math.pi), 4) #the converted angle of the elbow
+#    try:
+    if z > 0:
+        a_swivel = round(math.acos(z / x), 4)
+    elif z < 0:
+        a_swivel = round(((math.pi / 2) + math.asin(math.fabs(z)/x)), 4)
+    elif z == 0:
+        a_swivel = round(math.pi / 2, 4)
+#        a_swivel = round(math.asin(z / math.sqrt(x ** 2 + z ** 2)) + math.pi / 2, 4) #the swivel angle
+#    except:
+#        a_swivel = math.pi / 2 #the swivel angle when its angle doesn't matter
 
     try:
         #move shoulder motor
@@ -158,12 +169,11 @@ def motor_runner(x, y, z): #sends signals to all the motors based on potentiomet
             RPL.pwmWrite(shoulder_pul, 0, shoulder_motor_speed * 2) #stops running while in range
 
     except: #to show the values of the motor arm
-
         print('[elbow, shoulder, swivel]:', [round(a_elbow, 4), round(a_shoulder, 4), round(a_swivel, 4)], '[Speed]:', [speed], '[x, y, z]:', [round(x, 2), round(y, 2), round(z, 2)])
 
 while True:
     x, y, z = key_reader()
     motor_runner(x, y, z)
 
-            
+
 c.close()
