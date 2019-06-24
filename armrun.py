@@ -162,10 +162,8 @@ def motor_runner(x, y, z): #sends signals to all the motors based on potentiomet
         print('[elbow, shoulder, swivel]:', [round(a_elbow, 4), round(a_shoulder, 4), round(a_swivel, 4)], '[Speed]:', [speed], '[x, y, z]:', [round(x, 2), round(y, 2), round(z, 2)])
 
 while True:
-    try:
-        x, y, z = key_reader()
-        motor_runner(x, y, z)
-    except:
-        break
+    x, y, z = key_reader()
+    motor_runner(x, y, z)
+
             
 c.close()
