@@ -91,8 +91,8 @@ def pos(x, y, z):
     x_change = 0
     y_change = 0
     z_change = 0
-    gopen = 0
-    gclose = 0
+    gopen = 1
+    gclose = 1
 
     if event.type == pygame.KEYDOWN:
         # what key are they pressing? move accordingly
