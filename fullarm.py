@@ -115,20 +115,18 @@ def pos(x, y, z):
             gopen = 0
         elif event.key == pygame.K_l:
             gclose = 0
-        
+
 
     return x_change, y_change, z_change, gopen, gclose
+
+# s.connect(('127.0.0.1', port))
 
 try:
     s.connect(('192.168.21.135', port))
     print("connection successful")
 except:
-    try:
-        s.connect(('127.0.0.1', port))
-        print("connection successful")
-    except:
-        print("No connection")
-        connect = False
+    print("No connection")
+    connect = False
 
 
 while not done:
@@ -163,7 +161,7 @@ while not done:
         pygame.draw.circle(screen, blue, (400, 20), 10, 0)
     else:
         pygame.draw.circle(screen, black, (400, 20), 10, 0)
-        
+
     if ik(x, y, z) != False:
         # determine elbow point
         xe, ye, ze = ik(x,y,z)
@@ -190,7 +188,7 @@ while not done:
         pygame.draw.lines(screen, black, False, [[originx,originy], [xe, ye], [xo, yo]], 5)
         pygame.draw.circle(screen, pink, (x + originx, originy - y), (5), 0)
     if connect == True:
-        xyz = [x, y, z]
+        xyz = [x, y, z, gopen, gclose]
         data = pickle.dumps(xyz, protocol=2)
         #output = 'Thank you for connecting'
         s.sendall(data)
