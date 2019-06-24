@@ -8,6 +8,8 @@
 
 # now integrating grasper movement too
 
+# 0 = True, 1 = False
+
 import pygame, math, fractions, time
 import socket
 import pickle
@@ -51,6 +53,9 @@ port = 2187
 xyz = [x, y, z]
 
 
+gopen = 1
+gclose = 1
+
 done = False
 connect = True
 # ^^^ that all would be the setup
@@ -86,6 +91,8 @@ def pos(x, y, z):
     x_change = 0
     y_change = 0
     z_change = 0
+    gopen = 0
+    gclose = 0
 
     if event.type == pygame.KEYDOWN:
         # what key are they pressing? move accordingly
@@ -104,8 +111,13 @@ def pos(x, y, z):
             z_change = -step
         elif event.key == pygame.K_e:
             z_change = step
+        elif event.key == pygame.K_j:
+            gopen = 0
+        elif event.key == pygame.K_l:
+            gclose = 0
+        
 
-    return x_change, y_change, z_change
+    return x_change, y_change, z_change, gopen, gclose
 
 try:
     s.connect(('192.168.21.135', port))
@@ -127,7 +139,7 @@ while not done:
             done=True # Flag that we are done so we exit this loop
         else: # did something other than close
             try:
-                x_change, y_change, z_change = pos(x,y,z) # figure out the change
+                x_change, y_change, z_change, gopen, gclose = pos(x,y,z) # figure out the change
             except:
                 done = True
 
@@ -145,7 +157,13 @@ while not done:
     elif z_change != 0:
         x = math.sqrt((w**2) + (z**2))
 
-
+    if gopen == 0:
+        pygame.draw.circle(screen, pink, (display_width/2, 20), 10, 0)
+    elif gclose == 0:
+        pygame.draw.circle(screen, blue, (display_width/2, 20), 10, 0)
+    else:
+        pygame.draw.circle(screen, black, (display_width/2, 20), 10, 0)
+        
     if ik(x, y, z) != False:
         # determine elbow point
         xe, ye, ze = ik(x,y,z)
