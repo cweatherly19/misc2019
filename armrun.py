@@ -95,9 +95,9 @@ c.send('Thank you for connecting')
 def key_reader():
     xyz = c.recv(5000)
     input = pickle.loads(xyz)
-    x = input[0]
-    y = input[1]
-    z = input[2]
+    x = int(input[0])
+    y = int(input[1])
+    z = int(input[2])
     print input
     print y
    
