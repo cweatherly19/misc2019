@@ -6,6 +6,8 @@ y = d_one #starting y value
 z = 0.0 #starting z value
 gopen = 1
 gclose = 1
+wup = 1
+wdown = 1
 speed = 1 #starting speed (whole number between 1 and 4)
 
 microsoft = apple = False #determine which opperating system is being used
@@ -61,6 +63,7 @@ try: #if not connected to a RoboPi, it can still run
     ppin_elbow = 6 #pin number for elbow potentiomenter
     ppin_swivel = 7 #pin number for swivel potentiomenter
     gpin = 5
+    wpin = 6
 
     print "shoulder_pul", shoulder_pul
     print "shoulder_dir", shoulder_dir
@@ -103,6 +106,8 @@ def key_reader():
     z = int(input[2])
     gopen = int(input[3])
     gclose = int(input[4])
+    wup = int(input[5])
+    wdown = int(input[6])
     print input
     return x, y, z
 
@@ -139,6 +144,13 @@ def motor_runner(x, y, z): #sends signals to all the motors based on potentiomet
             RPL.servoWrite(gpin, 1700)
         else:
             RPL.servoWrite(gpin, 0)
+
+        if wup == 0:
+            RPL.servoWrite(wpin, 1400)
+        elif wdown == 0:
+            RPL.servoWrite(wpin, 1700)
+        else:
+            RPL.servoWrite(wpin, 0)
 
         #move shoulder motor
         pot_shoulder = RPL.analogRead(ppin_shoulder) * 3 * math.pi / (2 * shoulder_range) - math.pi / 4

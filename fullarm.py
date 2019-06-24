@@ -55,6 +55,8 @@ xyz = [x, y, z]
 
 gopen = 1
 gclose = 1
+wup = 1
+wdown = 1
 
 done = False
 connect = True
@@ -93,6 +95,8 @@ def pos(x, y, z):
     z_change = 0
     gopen = 1
     gclose = 1
+    wup = 1
+    wclose = 1
 
     if event.type == pygame.KEYDOWN:
         # what key are they pressing? move accordingly
@@ -115,9 +119,13 @@ def pos(x, y, z):
             gopen = 0
         elif event.key == pygame.K_l:
             gclose = 0
+        elif event.key == pygame.K_k:
+            wup = 0
+        elif event.key == pygame.K_i:
+            wdown = 0
 
 
-    return x_change, y_change, z_change, gopen, gclose
+    return x_change, y_change, z_change, gopen, gclose, wup, wdown
 
 # s.connect(('127.0.0.1', port))
 
@@ -137,7 +145,7 @@ while not done:
             done=True # Flag that we are done so we exit this loop
         else: # did something other than close
             try:
-                x_change, y_change, z_change, gopen, gclose = pos(x,y,z) # figure out the change
+                x_change, y_change, z_change, gopen, gclose, wup, wclose = pos(x,y,z) # figure out the change
             except:
                 done = True
 
@@ -156,11 +164,19 @@ while not done:
         x = math.sqrt((w**2) + (z**2))
 
     if gopen == 0:
-        pygame.draw.circle(screen, pink, (400, 20), 10, 0)
+        pygame.draw.circle(screen, red, (350, 20), 10, 0)
     elif gclose == 0:
-        pygame.draw.circle(screen, blue, (400, 20), 10, 0)
+        pygame.draw.circle(screen, green, (350, 20), 10, 0)
     else:
-        pygame.draw.circle(screen, black, (400, 20), 10, 0)
+        pygame.draw.circle(screen, black, (350, 20), 10, 0)
+
+    if wup == 0:
+        pygame.draw.circle(screen, red, (450, 20), 10, 0)
+    elif wdown == 0:
+        pygame.draw.circle(screen, green, (450, 20), 10, 0)
+    else:
+        pygame.draw.circle(screen, white, (450, 20), 10, 0)
+
 
     if ik(x, y, z) != False:
         # determine elbow point
@@ -188,7 +204,7 @@ while not done:
         pygame.draw.lines(screen, black, False, [[originx,originy], [xe, ye], [xo, yo]], 5)
         pygame.draw.circle(screen, pink, (x + originx, originy - y), (5), 0)
     if connect == True:
-        xyz = [x, y, z, gopen, gclose]
+        xyz = [x, y, z, gopen, gclose, wup, wdown]
         data = pickle.dumps(xyz, protocol=2)
         #output = 'Thank you for connecting'
         s.sendall(data)
