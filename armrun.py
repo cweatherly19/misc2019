@@ -106,12 +106,13 @@ def motor_runner(x, y, z): #sends signals to all the motors based on potentiomet
     sqd_one = d_one ** 2
     sqd_two = d_two ** 2
     d_three = math.sqrt((y**2) + (x**2))
-    a_elbow = math.acos((sqd_one + sqd_two - ((y**2) + (x ** 2))) / (2 * d_one * d_two))
-    a_two = math.asin((d_two * math.sin(a_elbow) / d_three)) # angle between shoulder and wrist
+    elbow_value = math.acos((sqd_one + sqd_two - ((y**2) + (x ** 2))) / (2 * d_one * d_two))
+    a_two = math.asin((d_two * math.sin(elbow_value) / d_three)) # angle between shoulder and wrist
     a_four = math.atan2(y , x) # angle between 0 line and wrist
     a_shoulder = round((a_four + a_two),4)  # shoulder angle
 
     reach_length = math.sqrt(x ** 2 + y ** 2 + z ** 2) #the momentary length of the arm
+    a_elbow = round(abs(elbow_value - math.pi), 4) #the converted angle of the elbow
 
 #    a_elbow = round(abs(elbow_value - math.pi), 4) #the converted angle of the elbow
 #    try:

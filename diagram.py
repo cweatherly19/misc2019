@@ -107,11 +107,12 @@ def pos(x, y, z):
     return x_change, y_change, z_change
 
 try:
-    s.connect(('127.0.0.1', port))
+    s.connect(('192.168.21.135', port))
     print("connection successful")
 except:
     try:
-        s.connect(('192.168.21.135', port))
+        s.connect(('127.0.0.1', port))
+        print("connection successful")
     except:
         print("No connection")
         connect = False
