@@ -131,9 +131,9 @@ def motor_runner(x, y, z): #sends signals to all the motors based on potentiomet
 
     try:
         # start w/ grasper
-        if gopen = 0:
+        if gopen == 0:
             RPL.servoWrite(gpin, 1400)
-        elif gclose = 0:
+        elif gclose == 0:
             RPL.servoWrite(gpin, 1700)
         else:
             RPL.servoWrite(gpin, 0)
