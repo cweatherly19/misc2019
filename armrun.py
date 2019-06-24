@@ -161,8 +161,7 @@ def motor_runner(): #sends signals to all the motors based on potentiometer read
                 RPL.pwmWrite(shoulder_pul, 0, shoulder_motor_speed * 2) #stops running while in range
 
         except: #to show the values of the motor arm
-            from time import sleep
-            sleep(1)
+            
             print('[elbow, shoulder, swivel]:', [round(a_elbow, 4), round(a_shoulder, 4), round(a_swivel, 4)], '[Speed]:', [speed], '[x, y, z]:', [round(x, 2), round(y, 2), round(z, 2)])
 
 while True:
