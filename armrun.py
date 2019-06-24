@@ -15,33 +15,6 @@ def test(): #function for angle domains
     if reach_length > d_one + d_two or reach_length < d_one - d_two:
         return False
 
-def x_up(): #increase x value
-    global x
-    x += 0.1 * speed
-def x_down(): #decrease x value
-    global x
-    x -= 0.1 * speed
-
-def y_up(): #increase y value
-    global y
-    y += 0.1 * speed
-def y_down(): #decrease y value
-    global y
-    y -= 0.1 * speed
-
-def z_up(): #increase z value
-    global z
-    z += 0.1 * speed
-def z_down(): #decrease z value
-    global z
-    z -= 0.1 * speed
-
-def speed_up(): #increase speed value
-    global speed
-    speed += 1
-def speed_down(): #decrease speed value
-    global speed
-    speed -= 1
 
 try: #if running on apple
     import sys, tty, termios #imports for no return command
@@ -58,51 +31,6 @@ except: #if running on microsoft
 
     microsoft = True #computer type
 
-def key_reader(): #reading input key functions
-    while True:
-        if apple == True:
-            key = sys.stdin.read(1) #reads one character of input without requiring a return command
-        elif microsoft == True:
-            key = msvcrt.getch() #format the keys into readable characters
-
-        if key == '1': #pressing the '1' key kills the process
-            if apple == True:
-                termios.tcsetattr(fd, termios.TCSADRAIN, old_settings) #resets the console settings
-            global quit #to quit out of the motor loop
-            quit = True
-            break
-
-        elif key.upper() == 'X' and speed < 4: #increase speed
-            speed_up()
-        elif key.upper() == 'Z' and speed > 1: #decrease speed
-            speed_down()
-
-        elif key.upper() == 'D': #increase x value
-            x_up()
-            if test() == False:
-                x_down()
-        elif key.upper() == 'A': #decrease x value
-            x_down()
-            if test() == False:
-                x_up()
-
-        elif key.upper() == 'W': #increase y value
-            y_up()
-            if test() == False:
-                y_down()
-        elif key.upper() == 'S': #decrease y value
-            y_down()
-            if test() == False:
-                y_up()
-
-        elif key.upper() == 'E': #increase z value
-            z_up()
-            if test() == False:
-                z_down()
-        elif key.upper() == 'Q': #decrease z value
-            z_down()
-            if test() == False:
-                z_up()
 
 quit = False #for breaking the motor loop with the '1' key command
 
@@ -147,6 +75,32 @@ try: #if not connected to a RoboPi, it can still run
 
 except:
     print 'Motors unrunnable: unable to reach RoboPiLib_pwm'
+
+    
+import socket
+import pickle
+
+s = socket.socket()
+print "Socket successfully created"
+port = 2187
+s.bind(('', port))
+print "socket binded to %s" %(port)
+s.listen(5)
+print "socket is listening"
+
+c, addr = s.accept()
+print 'Got connection from', addr
+c.send('Thank you for connecting')
+    
+def key_reader():
+    xyz = c.recv(5000)
+    input = pickle.loads(xyz)
+    x = input[0]
+    y = input[1]
+    z = input[2]
+    print input
+    print y
+   
 
 def motor_runner(): #sends signals to all the motors based on potentiometer readings
     while quit == False:
@@ -211,3 +165,4 @@ def motor_runner(): #sends signals to all the motors based on potentiometer read
 import threading #runs both functions simultanously
 threading.Thread(target = motor_runner, name = 'motor_runner').start()
 threading.Thread(target = key_reader, name = 'key_reader').start()
+c.close()
