@@ -158,11 +158,11 @@ while not done:
         x = math.sqrt((w**2) + (z**2))
 
     if gopen == 0:
-        pygame.draw.circle(screen, pink, (display_width/2, 20), 10, 0)
+        pygame.draw.circle(screen, pink, (400, 20), 10, 0)
     elif gclose == 0:
-        pygame.draw.circle(screen, blue, (display_width/2, 20), 10, 0)
+        pygame.draw.circle(screen, blue, (400, 20), 10, 0)
     else:
-        pygame.draw.circle(screen, black, (display_width/2, 20), 10, 0)
+        pygame.draw.circle(screen, black, (400, 20), 10, 0)
         
     if ik(x, y, z) != False:
         # determine elbow point
