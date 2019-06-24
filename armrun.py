@@ -96,8 +96,11 @@ def key_reader():
     xyz = c.recv(5000)
     input = pickle.loads(xyz)
     x = int(input[0])
+    global x
     y = int(input[1])
+    global y
     z = int(input[2])
+    global z
     print input
     print y
    
@@ -162,7 +165,11 @@ def motor_runner(): #sends signals to all the motors based on potentiometer read
             sleep(1)
             print('[elbow, shoulder, swivel]:', [round(a_elbow, 4), round(a_shoulder, 4), round(a_swivel, 4)], '[Speed]:', [speed], '[x, y, z]:', [round(x, 2), round(y, 2), round(z, 2)])
 
-import threading #runs both functions simultanously
-threading.Thread(target = motor_runner, name = 'motor_runner').start()
-threading.Thread(target = key_reader, name = 'key_reader').start()
+while True:
+    try:
+        key_reader()
+        motor_runner()
+    except:
+        break
+            
 c.close()
