@@ -29,6 +29,12 @@ while True:
     xyz = c.recv(5000)
 
     input = pickle.loads(xyz)
+    x = int(input[0])
+    y = int(input[1])
+    z = int(input[2])
+    print x
+    print y
+    print z
     print input
 
 # Close the connection with the client
