@@ -107,10 +107,11 @@ def pos(x, y, z):
     return x_change, y_change, z_change
 
 try:
-    s.connect(('192.168.21.135', port))
+    s.connect(('127.0.0.1', port))
+    print("connection successful")
 except:
     try:
-        s.connect(('127.0.0.1', port))
+        s.connect(('192.168.21.135', port))
     except:
         print("No connection")
         connect = False
@@ -123,8 +124,10 @@ while not done:
         if event.type == pygame.QUIT: # If user clicked close
             done=True # Flag that we are done so we exit this loop
         else: # did something other than close
-            x_change, y_change, z_change = pos(x,y,z) # figure out the change
-
+            try:
+                x_change, y_change, z_change = pos(x,y,z) # figure out the change
+            except:
+                done = True
 
     # move
 
@@ -184,6 +187,5 @@ while not done:
     pygame.draw.rect(screen, grey, [0, (originy + 24), display_width, display_width])
 
 #please work rectangle
-print(s.recv(200))
 s.close()
 pygame.quit()

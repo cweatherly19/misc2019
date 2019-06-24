@@ -5,13 +5,14 @@
 # so its continuously receiving a connection and fresh data
 # pickles is for making legible, useable data
 # right now can run with diagram.py to print the coordinates it's supes cool
+# THIS SHOULD BE ON CONNOR'S CODE
+
 
 import socket
 import pickle
 
 # next create a socket object
 s = socket.socket()
-print "Socket successfully created"
 
 port = 2187
 s.bind(('', port))
