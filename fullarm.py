@@ -211,6 +211,9 @@ while not done:
     #s.send(xyz)
 
 # Be IDLE friendly
+    pygame.draw.rect(gameDisplay, red,(50,50,100,50))
+
+
     pygame.display.update()
     screen.fill(grey)
     pygame.draw.circle(screen, white, (originx, originy), (d_one + d_two), 0)
