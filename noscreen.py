@@ -1,20 +1,28 @@
 # ugh testing pygame
 
+import sys
 import pygame
 from pygame.locals import *
+import pygame.camera
+import os
+
+os.environ["SDL_VIDEODRIVER"] = "dummy"
 pygame.init()
+pygame.camera.init()
 
 done = False
 clock = pygame.time.Clock()
 
-try:
-    screen = pygame.display.set_mode((400,300))
-    screen.fill(255,255,255)
-except:
-    while not done:
-        clock.tick(10)
-        for event in pygame.event.get(): # User did something
-            if event.type == pygame.QUIT: # If user clicked close
-                done=True # Flag that we are done so we exit this loop
-            else: # did something other than close
-                print("congrats")
+cam_list = pygame.camera.list_cameras()
+webcam = pygame.camera.Camera(cam_list[0],(32,24))
+webcam.start()
+
+
+#grab image, scale and blit to screen
+imagen = webcam.get_image()
+imagen = pygame.transform.scale(imagen,(640,480))
+print("yike")
+
+webcam.stop()
+pygame.quit()
+sys.exit()
