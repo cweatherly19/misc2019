@@ -95,28 +95,22 @@ def pos(x, y, z):
             return done
         elif event.key == pygame.K_a:
             x_change = -step
-            if test(x, y, z) == False:
-                x_change = 0
+
         elif event.key == pygame.K_d:
             x_change = step
-            if test(x, y, z) == False:
-                x_change = 0
+
         elif event.key == pygame.K_w:
             y_change = step
-            if test(x, y, z) == False:
-                y_change = 0
+
         elif event.key == pygame.K_s:
             y_change = -step
-            if test(x, y, z) == False:
-                y_change = 0
+
         elif event.key == pygame.K_q:
             z_change = -step
-            if test(x, y, z) == False:
-                z_change = 0
+
         elif event.key == pygame.K_e:
             z_change = step
-            if test(x, y, z) == False:
-                z_change = 0
+
         elif event.key == pygame.K_j:
             gopen = 0
             #gopen = False
@@ -221,7 +215,6 @@ while not done:
     #s.send(xyz)
 
     # Be IDLE friendly
-    pygame.draw.rect(screen, red,(50, 50, 100, 50))
 
     pygame.display.update()
     screen.fill(grey)
@@ -232,6 +225,6 @@ while not done:
     pygame.draw.circle(screen, grey, (toriginz, toriginw), (10), 0)
     pygame.draw.rect(screen, grey, [0, (originy + 24), display_width, display_width])
 
-#closes the imported files
+#closes the imported filess
 s.close()
 pygame.quit()
