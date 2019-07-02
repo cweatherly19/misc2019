@@ -4,39 +4,18 @@ d_two = 48.0 #distance from elbow to wrist
 x = d_two #starting x value
 y = d_one #starting y value
 z = 0.0 #starting z value
+
 gopen = 1
 gclose = 1
 wup = 1
 wdown = 1
+
 speed = 1 #starting speed (whole number between 1 and 4)
-
-microsoft = apple = False #determine which opperating system is being used
-
-print "Press '1' to end code"
 
 def test(): #function for angle domains
     reach_length = (x ** 2 + y ** 2 + z ** 2) ** 0.5
     if reach_length > d_one + d_two or reach_length < d_one - d_two:
         return False
-
-
-try: #if running on apple
-    import sys, tty, termios #imports for no return command
-
-    fd = sys.stdin.fileno() #unix file descriptor to define the file type
-    old_settings = termios.tcgetattr(fd) #records the existing console settings
-
-    tty.setcbreak(sys.stdin) #sets the style of input
-
-    apple = True #computer type
-
-except: #if running on microsoft
-    import msvcrt #microsoft file for key input
-
-    microsoft = True #computer type
-
-
-quit = False #for breaking the motor loop with the '1' key command
 
 import math #to calculate all angle values and error
 try: #if not connected to a RoboPi, it can still run
@@ -111,25 +90,25 @@ def key_reader():
     print input
     return x, y, z
 
-
 def motor_runner(x, y, z): #sends signals to all the motors based on potentiometer readings
-    sqd_one = d_one ** 2
-    sqd_two = d_two ** 2
-    d_three = math.sqrt((y**2) + (x**2))
-    elbow_value = math.acos((sqd_one + sqd_two - ((y**2) + (x ** 2))) / (2 * d_one * d_two))
-    a_two = math.asin((d_two * math.sin(elbow_value) / d_three)) # angle between shoulder and wrist
-    a_four = math.atan2(y , x) # angle between 0 line and wrist
-    a_shoulder = round((a_four + a_two),4)  # shoulder angle
-
-    reach_length = math.sqrt(x ** 2 + y ** 2 + z ** 2) #the momentary length of the arm
+    #sqd_one = d_one ** 2
+    #sqd_two = d_two ** 2
+    d_three = math.sqrt(y ** 2 + x ** 2)
+    
+    #elbow_value = math.acos((sqd_one + sqd_two - d_three ** 2) / (2 * d_one * d_two))
+    elbow_value = math.acos((d_one ** 2 + d_two ** 2 - d_three ** 2) / (2 * d_one * d_two))
     a_elbow = round(abs(elbow_value - math.pi), 4) #the converted angle of the elbow
+    
+    #a_two = math.asin((d_two * math.sin(elbow_value) / d_three)) # angle between shoulder and wrist
+    #a_four = math.atan2(y , x) # angle between 0 line and wrist
+    #a_shoulder = round((a_four + a_two), 4)  # shoulder angle
+    a_shoulder = round(math.atan2(y, x) + math.asin(d_two * math.sin(elbow_value) / d_three), 4)
 
-#    a_elbow = round(abs(elbow_value - math.pi), 4) #the converted angle of the elbow
 #    try:
     if z > 0:
         a_swivel = round(math.acos(z / x), 4)
     elif z < 0:
-        a_swivel = round(((math.pi / 2) + math.asin(math.fabs(z)/x)), 4)
+        a_swivel = round(math.pi / 2 + math.asin(math.fabs(z) / x), 4)
     elif z == 0:
         a_swivel = round(math.pi / 2, 4)
 #        a_swivel = round(math.asin(z / math.sqrt(x ** 2 + z ** 2)) + math.pi / 2, 4) #the swivel angle
@@ -189,17 +168,8 @@ def motor_runner(x, y, z): #sends signals to all the motors based on potentiomet
         else:
             RPL.servoWrite(swivel_continuous, 0) #stops running while in range
 
-        if quit == True: #stop the motors when the code ends
-            RPL.servoWrite(swivel_continuous, 0) #stops running while in range
-            RPL.pwmWrite(elbow_pul, 0, elbow_motor_speed * 2) #stops running while in range
-            RPL.pwmWrite(shoulder_pul, 0, shoulder_motor_speed * 2) #stops running while in range
-
-    except: #to show the values of the motor arm
-        print('[elbow, shoulder, swivel]:', [round(a_elbow, 4), round(a_shoulder, 4), round(a_swivel, 4)], '[Speed]:', [speed], '[x, y, z]:', [round(x, 2), round(y, 2), round(z, 2)], gopen, gclose)
-
 while True:
     x, y, z = key_reader()
     motor_runner(x, y, z)
-
 
 c.close()
