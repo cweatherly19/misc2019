@@ -78,6 +78,11 @@ def ik(x, y, z): # here is where we do math
     #update the screen
     pygame.display.flip()
 
+def test(x, y, z): #function for domains
+    reach_length = (x ** 2 + y ** 2 + z ** 2) ** 0.5
+    if reach_length > d_one + d_two or reach_length < d_one - d_two or y > -24:
+        return False
+
 def pos(x, y, z):
     x_change = y_change = z_change = 0
     gopen = gclose = wup = wdown = 1
@@ -90,24 +95,40 @@ def pos(x, y, z):
             return done
         elif event.key == pygame.K_a:
             x_change = -step
+            if test(x, y, z) == False:
+                x_change = 0
         elif event.key == pygame.K_d:
             x_change = step
+            if test(x, y, z) == False:
+                x_change = 0
         elif event.key == pygame.K_w:
             y_change = step
+            if test(x, y, z) == False:
+                y_change = 0
         elif event.key == pygame.K_s:
             y_change = -step
+            if test(x, y, z) == False:
+                y_change = 0
         elif event.key == pygame.K_q:
             z_change = -step
+            if test(x, y, z) == False:
+                z_change = 0
         elif event.key == pygame.K_e:
             z_change = step
+            if test(x, y, z) == False:
+                z_change = 0
         elif event.key == pygame.K_j:
             gopen = 0
+            #gopen = False
         elif event.key == pygame.K_l:
             gclose = 0
+            #gclose = False
         elif event.key == pygame.K_k:
             wup = 0
+            #wup = False
         elif event.key == pygame.K_i:
             wdown = 0
+            #wdown = False
 
     return x_change, y_change, z_change, gopen, gclose, wup, wdown
 
@@ -196,10 +217,11 @@ while not done:
         data = pickle.dumps(xyz, protocol = 2)
         #output = 'Thank you for connecting'
         s.sendall(data)
+
     #s.send(xyz)
 
     # Be IDLE friendly
-
+    pygame.draw.rect(screen, red,(50, 50, 100, 50))
 
     pygame.display.update()
     screen.fill(grey)
