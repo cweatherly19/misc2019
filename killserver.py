@@ -20,11 +20,13 @@ input = pickle.loads(m)
 M_R = int(input[0])
 M_L = int(input[1])
 
-RPL.pwmWrite(0,0,3)
-RPL.pwmWrite(1,0,3)
-
 print M_R
 print M_L
+
+while True:
+    RPL.servoWrite(0,0,3)
+    RPL.servoWrite(1,0,3)
+
 
 
 # Close the connection with the client
