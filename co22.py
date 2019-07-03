@@ -41,16 +41,15 @@ while now - start < 1080:
     else:
         content = 357
     if content <= 250 or base - content >= 30:
-        PTW.state['CO2detect'] = 2
+        PTW.state['CO2detect: Life possible'] = 2
 
     elif content <= 190 or base - content >= 50:
-        PTW.state['CO2detect'] = 3
+        PTW.state['CO2detect: Life certain'] = 3
 
     else:
         PTW.state['CO2detect'] = 1
-        x = 0
+        
     PTW.state['Co2 data: '] = content
-
     now = time.time()
     minutes, seconds = divmod((now - start), 60)
     PTW.state['Time from start:'] = minutes, seconds
