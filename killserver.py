@@ -3,6 +3,7 @@ import pickle
 import RoboPiLib as RPL
 import setup
 import subprocess
+import time
 
 s = socket.socket()
 port = 7777
@@ -26,8 +27,11 @@ print M_L
 
 RPL.servoWrite(0,0)
 RPL.servoWrite(1,0)
+time.sleep(.2)
+while True:
+    RPL.servoWrite(0,0)
+    RPL.servoWrite(1,0)
 
-subprocess.call("sudo reboot")
 
 
 
