@@ -10,13 +10,14 @@
 
 # 0 = True, 1 = False
 
-d_one = 62 # the distance from shoulder to elbow
-d_two = 48 # distance from elbow to wrist
+d_one = 60 # the distance from shoulder to elbow
+d_two = 60 # distance from elbow to wrist
 
 #the files needed to run the code
 import pygame, math, time, socket, pickle
 from pygame.locals import *
 
+#enters Pygame
 pygame.init()
 
 #define the colors for the display
@@ -35,11 +36,11 @@ screen.fill(white)
 step = 2
 
 #set the origin of the side view
-originx = 175
+originx = 225
 originy = 250
 
 #set the origin of the top view
-toriginz = 550
+toriginz = 575
 toriginw = 250
 
 #defining variables so no error occurs
@@ -61,14 +62,20 @@ done = False
 connect = True
 
 def ik(x, y, z): # here is where we do math
-    d_three = math.sqrt(y ** 2 + x ** 2)# determining distance from shoulder to wrist
-    if d_three < d_one + d_two and d_three > d_one - d_two and y > -24:
+    arm_reach = math.sqrt(y ** 2 + x ** 2)# determining distance from shoulder to wrist
+    if arm_reach < d_one + d_two and arm_reach > d_one - d_two and y > -24:
 
-        a_shoulder = math.acos((d_three ** 2 + d_one ** 2 - d_two ** 2) / (2 * d_one * d_three)) + math.atan2(y, x) #angle of shoulder
+        a_shoulder = math.acos((arm_reach ** 2 + d_one ** 2 - d_two ** 2) / (2 * d_one * arm_reach)) + math.atan2(y, x) #angle of shoulder
 
         xe = d_one * math.cos(a_shoulder)
-        ze = xe * z / x
         ye = d_one * math.sin(a_shoulder)
+
+        ############################CHANGE HERE?######################
+        if x == 0:
+            ze = xe * z
+        else:
+            ze = xe * z / x
+        ##############################################################
 
         return xe, ye, ze
 
@@ -78,15 +85,10 @@ def ik(x, y, z): # here is where we do math
     #update the screen
     pygame.display.flip()
 
-def test(x, y, z): #function for domains
-    reach_length = (x ** 2 + y ** 2 + z ** 2) ** 0.5
-    if reach_length > d_one + d_two or reach_length < d_one - d_two or y > -24:
-        return False
-
 def pos(x, y, z):
     x_change = y_change = z_change = 0
-    gopen = gclose = wup = wdown = 1
-    #gopen = gclose = wup = wdown = True
+    gopen = gclose = 1
+    #gopen = gclose = True
 
     if event.type == pygame.KEYDOWN:
         # what key are they pressing? move accordingly
@@ -95,41 +97,30 @@ def pos(x, y, z):
             return done
         elif event.key == pygame.K_a:
             x_change = -step
-
         elif event.key == pygame.K_d:
             x_change = step
-
         elif event.key == pygame.K_w:
             y_change = step
-
         elif event.key == pygame.K_s:
             y_change = -step
-
         elif event.key == pygame.K_q:
             z_change = -step
-
         elif event.key == pygame.K_e:
             z_change = step
-
         elif event.key == pygame.K_j:
             gopen = 0
-            #gopen = False
+            #gopen = True
         elif event.key == pygame.K_l:
             gclose = 0
-            #gclose = False
-        elif event.key == pygame.K_k:
-            wup = 0
-            #wup = False
-        elif event.key == pygame.K_i:
-            wdown = 0
-            #wdown = False
+            #gclose = True
 
-    return x_change, y_change, z_change, gopen, gclose, wup, wdown
+
+    return x_change, y_change, z_change, gopen, gclose
 
 # s.connect(('127.0.0.1', port))
 # tests if you can connect
 try:
-    s.connect(('192.168.21.135', port))
+    s.connect(('192.168.1.5', port))
     print("connection successful")
 except:
     print("No connection")
@@ -140,14 +131,14 @@ clock = pygame.time.Clock()
 
 #loop to run and update the screen
 while not done:
-    clock.tick(60)
+    clock.tick(20)
     # determine where want to be
     for event in pygame.event.get(): # User did something
         if event.type == pygame.QUIT: # If user clicked close
             done = True # Flag that we are done so we exit this loop
         else: # did something other than close
             try:
-                x_change, y_change, z_change, gopen, gclose, wup, wdown = pos(x,y,z) # figure out the change
+                x_change, y_change, z_change, gopen, gclose = pos(x, y, z) # figure out the change
             except:
                 done = True
 
@@ -156,12 +147,17 @@ while not done:
     y += y_change
     z += z_change
 
-    if x_change and z_change == 0:
-        w = math.sqrt(x ** 2 - z ** 2)
-    elif x_change != 0:
-        w = math.sqrt(x ** 2 - z ** 2)
+#######################CHANGES HERE##############################
+
+    if z_change == 0:
+        w = math.sqrt(abs(x ** 2 - z ** 2))
+        if x < z:
+            w = -w
+
     elif z_change != 0:
         x = math.sqrt(w ** 2 + z ** 2)
+
+#######################CHANGES HERE##############################
 
     #set the screen circle's colorings depending on position
     if gopen == 0:
@@ -173,39 +169,40 @@ while not done:
     else:
         pygame.draw.circle(screen, black, (350, 20), 10, 0)
 
-    if wup == 0:
-    #if wup == False:
-        pygame.draw.circle(screen, red, (450, 20), 10, 0)
-    elif wdown == 0:
-    #elif wdown == Fale:
-        pygame.draw.circle(screen, green, (450, 20), 10, 0)
-    else:
-        pygame.draw.circle(screen, white, (450, 20), 10, 0)
 
     if ik(x, y, z) != False:
         # determine elbow point
         xe, ye, ze = ik(x, y, z)
-        if xe == 0:
+
+        try:
+            we = math.sqrt(abs(xe ** 2 - ze ** 2))
+        except:
             we = 0
-        else:
-            we = math.sqrt(xe ** 2 - ze ** 2)
-            if xe < 0:
-                we = -we
+        if xe < 0:
+            we = -we
+        ################CHANGE HERE###################
 
         #so Pygame can move and not reset the origins
         xo = x + originx; yo = originy - y; zo = toriginz + z
         xe = xe + originx; ye = originy - ye; ze = toriginz + ze
+        wo = w
 
         # draw lines
         #pygame.draw.lines(screen, blue, False, [[originx,originy], [xe, ye], [xo, yo]], 5) # sideview
         pygame.draw.line(screen, blue, (xe, ye), [(xo), (yo)], 5)
         pygame.draw.line(screen, pink, (originx, originy), (xe, ye), 5)
 
-        pygame.draw.line(screen, blue, (toriginz, toriginw), [(zo), (toriginw - w)], 5)
+        pygame.draw.line(screen, blue, (toriginz, toriginw), (zo, toriginw - w), 5)
         pygame.draw.line(screen, pink, (toriginz, toriginw), (ze, toriginw - we), 5)
-    else: # out of range so stay
-        pygame.draw.lines(screen, black, False, [[originx,originy], [xe, ye], [xo, yo]], 5)
-        pygame.draw.circle(screen, pink, (x + originx, originy - y), (5), 0)
+
+    else: # if out of range
+        pygame.draw.lines(screen, black, False, [[originx, originy], [xe, ye], [xo, yo]], 5)
+        pygame.draw.line(screen, black, (toriginz, toriginw), (zo, toriginw - wo), 5)
+        #show where you are out of range
+        x -= x_change
+        y -= y_change
+        z -= z_change
+
     if connect == True:
         xyz = [x, y, z, gopen, gclose, wup, wdown]
         data = pickle.dumps(xyz, protocol = 2)
@@ -215,16 +212,15 @@ while not done:
     #s.send(xyz)
 
     # Be IDLE friendly
-
     pygame.display.update()
     screen.fill(grey)
     pygame.draw.circle(screen, white, (originx, originy), (d_one + d_two), 0)
     pygame.draw.circle(screen, grey, (originx, originy), (d_one - d_two), 0)
     # topview
     pygame.draw.circle(screen, white, (toriginz, toriginw), (d_one + d_two), 0)
-    pygame.draw.circle(screen, grey, (toriginz, toriginw), (10), 0)
-    pygame.draw.rect(screen, grey, [0, (originy + 24), display_width, display_width])
+    pygame.draw.circle(screen, grey, (toriginz, toriginw), (d_one - d_two), 0)
+    pygame.draw.rect(screen, grey, [0, (originy + 24), display_width / 2, display_width / 2])
 
-#closes the imported filess
+#closes the imported files
 s.close()
 pygame.quit()
