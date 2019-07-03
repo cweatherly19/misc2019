@@ -71,10 +71,10 @@ def ik(x, y, z): # here is where we do math
         ye = d_one * math.sin(a_shoulder)
 
         ############################CHANGE HERE?######################
-        try:
+        if x == 0:
+            ze = xe * z
+        else:
             ze = xe * z / x
-        except:
-            ze = 0
         ##############################################################
 
         return xe, ye, ze
@@ -87,52 +87,40 @@ def ik(x, y, z): # here is where we do math
 
 def pos(x, y, z):
     x_change = y_change = z_change = 0
-    gopen = gclose = wup = wdown = 1
-    #gopen = gclose = wup = wdown = True
+    gopen = gclose = 1
+    #gopen = gclose = True
 
     if event.type == pygame.KEYDOWN:
         # what key are they pressing? move accordingly
         if event.key == pygame.K_ESCAPE:
             done = True
             return done
-
         elif event.key == pygame.K_a:
             x_change = -step
-
         elif event.key == pygame.K_d:
             x_change = step
-
         elif event.key == pygame.K_w:
             y_change = step
-
         elif event.key == pygame.K_s:
             y_change = -step
-
         elif event.key == pygame.K_q:
             z_change = -step
-
         elif event.key == pygame.K_e:
             z_change = step
-
         elif event.key == pygame.K_j:
             gopen = 0
-            #gopen = False
+            #gopen = True
         elif event.key == pygame.K_l:
             gclose = 0
-            #gclose = False
-        elif event.key == pygame.K_k:
-            wup = 0
-            #wup = False
-        elif event.key == pygame.K_i:
-            wdown = 0
-            #wdown = False
+            #gclose = True
 
-    return x_change, y_change, z_change, gopen, gclose, wup, wdown
+
+    return x_change, y_change, z_change, gopen, gclose
 
 # s.connect(('127.0.0.1', port))
 # tests if you can connect
 try:
-    s.connect(('192.168.21.135', port))
+    s.connect(('192.168.1.5', port))
     print("connection successful")
 except:
     print("No connection")
@@ -143,14 +131,14 @@ clock = pygame.time.Clock()
 
 #loop to run and update the screen
 while not done:
-    clock.tick(60)
+    clock.tick(20)
     # determine where want to be
     for event in pygame.event.get(): # User did something
         if event.type == pygame.QUIT: # If user clicked close
             done = True # Flag that we are done so we exit this loop
         else: # did something other than close
             try:
-                x_change, y_change, z_change, gopen, gclose, wup, wdown = pos(x, y, z) # figure out the change
+                x_change, y_change, z_change, gopen, gclose = pos(x, y, z) # figure out the change
             except:
                 done = True
 
@@ -181,25 +169,16 @@ while not done:
     else:
         pygame.draw.circle(screen, black, (350, 20), 10, 0)
 
-    if wup == 0:
-    #if wup == False:
-        pygame.draw.circle(screen, red, (450, 20), 10, 0)
-    elif wdown == 0:
-    #elif wdown == Fale:
-        pygame.draw.circle(screen, green, (450, 20), 10, 0)
-    else:
-        pygame.draw.circle(screen, white, (450, 20), 10, 0)
 
     if ik(x, y, z) != False:
         # determine elbow point
         xe, ye, ze = ik(x, y, z)
-#######################MAYBE DELETE THIS?########################
-        #if xe == 0:
-            #we = 0
-        #else:
-#################################################################
-        we = math.sqrt(abs(xe ** 2 - ze ** 2))
-        if xe < ze:
+
+        try:
+            we = math.sqrt(abs(xe ** 2 - ze ** 2))
+        except:
+            we = 0
+        if xe < 0:
             we = -we
         ################CHANGE HERE###################
 
@@ -220,8 +199,9 @@ while not done:
         pygame.draw.lines(screen, black, False, [[originx, originy], [xe, ye], [xo, yo]], 5)
         pygame.draw.line(screen, black, (toriginz, toriginw), (zo, toriginw - wo), 5)
         #show where you are out of range
-        pygame.draw.circle(screen, pink, (int(originx + x), int(originy - y)), 5, 0)
-        pygame.draw.circle(screen, blue, (int(toriginz + z), int(toriginw - w)), 5, 0)
+        x -= x_change
+        y -= y_change
+        z -= z_change
 
     if connect == True:
         xyz = [x, y, z, gopen, gclose, wup, wdown]
