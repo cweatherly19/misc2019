@@ -10,7 +10,7 @@
 
 import RoboPiLib as RPL
 import setup
-import post_to_web_c as PTW
+import post_to_web as PTW
 import time
 
 pi = True
