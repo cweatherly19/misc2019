@@ -10,8 +10,9 @@
 
 # 0 = True, 1 = False
 
-d_one = 60 # the distance from shoulder to elbow
-d_two = 60 # distance from elbow to wrist
+d_one = 23 # the distance from shoulder to elbow
+d_two = 23 # distance from elbow to wrist
+robot_h = 24
 
 #the files needed to run the code
 import pygame, math, time, socket, pickle
@@ -63,7 +64,7 @@ connect = True
 
 def ik(x, y, z): # here is where we do math
     arm_reach = math.sqrt(y ** 2 + x ** 2)# determining distance from shoulder to wrist
-    if arm_reach < d_one + d_two and arm_reach > d_one - d_two and y > -24:
+    if arm_reach < d_one + d_two and arm_reach > d_one - d_two and y > -robot_h:
 
         a_shoulder = math.acos((arm_reach ** 2 + d_one ** 2 - d_two ** 2) / (2 * d_one * arm_reach)) + math.atan2(y, x) #angle of shoulder
 
@@ -219,7 +220,7 @@ while not done:
     # topview
     pygame.draw.circle(screen, white, (toriginz, toriginw), (d_one + d_two), 0)
     pygame.draw.circle(screen, grey, (toriginz, toriginw), (d_one - d_two), 0)
-    pygame.draw.rect(screen, grey, [0, (originy + 24), display_width / 2, display_width / 2])
+    pygame.draw.rect(screen, grey, [0, (originy + robot_h), display_width / 2, display_width / 2])
 
 #closes the imported files
 s.close()
