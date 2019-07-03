@@ -40,19 +40,20 @@ while now - start < 1080:
         content = RPL.analogRead(co)
     else:
         content = 357
-    if content <= 250 or base - content >= 30:
-        PTW.state['CO2detect: Life possible'] = 2
+    if base - content >= 30:
+        PTW.state['CO2detect: Life possible']
 
-    elif content <= 190 or base - content >= 50:
+    elif base - content >= 50:
         PTW.state['CO2detect: Life certain'] = 3
 
     else:
-        PTW.state['CO2detect'] = 1
+        PTW.state['CO2detect: No life detected'] = 1
         
     PTW.state['Co2 data: '] = content
     now = time.time()
     minutes, seconds = divmod((now - start), 60)
-    PTW.state['Time from start:'] = minutes, seconds
+    PTW.state['Minutes: '] = minutes
+    PTW.state['Seconds: '] = seconds
 
     PTW.post()
 
