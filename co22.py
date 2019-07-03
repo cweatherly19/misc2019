@@ -14,7 +14,7 @@ import post_to_web as PTW
 import time
 
 pi = True
-co = 1
+co = 0
 average = [ ]
 base = 0
 content = 0
