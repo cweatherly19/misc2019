@@ -16,7 +16,6 @@ import time, math
 pi = True
 co = 6
 average = [ ]
-base = 0
 content = 0
 
 fr = 2
@@ -34,7 +33,7 @@ now = time.time()
 
 PTW.state['Start Time:'] = time.asctime(time.localtime())
 
-RPL.analogRead(co)
+base = RPL.analogRead(co)
 
 # ^ setup
 
@@ -49,7 +48,7 @@ while now - start < 1080:
     sidel = RPL.analogRead(sl)
     sider = RPL.analogRead(sr)
 
-    if base - content >= 5 or content < 630:
+    if base - content >= 5:
         PTW.state['CO2detect: Life possible'] = True
     elif base - content >= 15:
         PTW.state['CO2detect: Life certain'] = True
