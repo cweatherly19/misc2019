@@ -12,7 +12,7 @@ c, addr = s.accept()
 print 'Got connection from', addr
 
 # send a thank you message to the client.
-c.send('Thank you for connecting')
+c.send('YOU HAVE KILLED')
 m = c.recv(70)
 
 input = pickle.loads(m)
