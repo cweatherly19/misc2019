@@ -12,7 +12,7 @@ port = 7777
 # connect to the server on local computer
 # first number if on computer: 127.0.0.1
 # if on pi: 192.168.21.xxx, xxx being the chip #
-s.connect(('192.168.1.2', port))
+s.connect(('192.168.1.3', port))
 
 data = pickle.dumps(oof)	#Pickles the data [see ControlPyEvolvedCore for more information]
 s.sendall(data)
