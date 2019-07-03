@@ -18,8 +18,6 @@ co = 1
 average = [ ]
 base = 0
 content = 0
-PTW.state['CO2detect'] = 1
-PTW.state['Co2'] = 1
 
 start = time.time()
 now = time.time()
