@@ -19,17 +19,15 @@ average = [ ]
 base = 0
 content = 0
 
+fr = 2
+fl = 1
+sl = 0
+sr = 3
 
 frontr = RPL.analogRead(fr)
 frontl = RPL.analogRead(fl)
 sidel = RPL.analogRead(sl)
 sider = RPL.analogRead(sr)
-
-
-fr = 2
-fl = 1
-sl = 0
-sr = 3
 
 start = time.time()
 now = time.time()
