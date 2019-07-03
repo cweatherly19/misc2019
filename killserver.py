@@ -24,8 +24,8 @@ print M_R
 print M_L
 
 while True:
-    RPL.servoWrite(0,0,3)
-    RPL.servoWrite(1,0,3)
+    RPL.servoWrite(0,0)
+    RPL.servoWrite(1,0)
 
 
 
