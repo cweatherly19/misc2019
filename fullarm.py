@@ -10,8 +10,12 @@
 
 # 0 = True, 1 = False
 
-d_one = 60 # the distance from shoulder to elbow
-d_two = 60 # distance from elbow to wrist
+d_one = 23 # the distance from shoulder to elbow
+d_two = 23 # distance from elbow to wrist
+mult = 3
+d_one = d_one * mult
+d_two = d_two * mult
+height = 24 * 3
 
 #the files needed to run the code
 import pygame, math, time, socket, pickle
@@ -53,9 +57,8 @@ s = socket.socket()
 port = 2187
 xyz = [x, y, z]
 
-
-gopen = gclose = wup = wdown = 1
-#gopen = gclose = wup = wdown = True
+gopen = gclose = 1
+#gopen = gclose = False
 
 #set up kill commands
 done = False
@@ -63,7 +66,7 @@ connect = True
 
 def ik(x, y, z): # here is where we do math
     arm_reach = math.sqrt(y ** 2 + x ** 2)# determining distance from shoulder to wrist
-    if arm_reach < d_one + d_two and arm_reach > d_one - d_two and y > -24:
+    if arm_reach < d_one + d_two and arm_reach > d_one - d_two and y > -height:
 
         a_shoulder = math.acos((arm_reach ** 2 + d_one ** 2 - d_two ** 2) / (2 * d_one * arm_reach)) + math.atan2(y, x) #angle of shoulder
 
@@ -147,7 +150,6 @@ while not done:
     y += y_change
     z += z_change
 
-#######################CHANGES HERE##############################
 
     if z_change == 0:
         w = math.sqrt(abs(x ** 2 - z ** 2))
@@ -155,9 +157,11 @@ while not done:
             w = -w
 
     elif z_change != 0:
-        x = math.sqrt(w ** 2 + z ** 2)
+        if x < 0:
+            x = -math.sqrt(w ** 2 + z ** 2)
+        else:
+            x = math.sqrt(w ** 2 + z ** 2)
 
-#######################CHANGES HERE##############################
 
     #set the screen circle's colorings depending on position
     if gopen == 0:
@@ -204,7 +208,7 @@ while not done:
         z -= z_change
 
     if connect == True:
-        xyz = [x, y, z, gopen, gclose, wup, wdown]
+        xyz = [x, y, z, gopen, gclose]
         data = pickle.dumps(xyz, protocol = 2)
         #output = 'Thank you for connecting'
         s.sendall(data)
@@ -219,7 +223,7 @@ while not done:
     # topview
     pygame.draw.circle(screen, white, (toriginz, toriginw), (d_one + d_two), 0)
     pygame.draw.circle(screen, grey, (toriginz, toriginw), (d_one - d_two), 0)
-    pygame.draw.rect(screen, grey, [0, (originy + 24), display_width / 2, display_width / 2])
+    pygame.draw.rect(screen, grey, [0, (originy + height), display_width / 2, display_width / 2])
 
 #closes the imported files
 s.close()
