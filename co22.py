@@ -56,14 +56,18 @@ while now - start < 1080:
 
     else:
         content = 357
-    if base - content >= 30:
-        PTW.state['CO2detect: Life possible']
+    if base - content >= 5 or content < 630:
+        PTW.state['CO2detect: Life possible'] = True
 
-    elif base - content >= 50:
-        PTW.state['CO2detect: Life certain'] = 3
+    elif base - content >= 15:
+        PTW.state['CO2detect: Life certain'] = True
 
     else:
-        PTW.state['CO2detect: No life detected'] = 1
+        PTW.state['CO2detect: No life detected'] = True
+    PTW.state['Front right: '] = frontr
+    PTW.state['Front left: '] = frontl
+    PTW.state['Left side: '] = sidel
+    PTW.state['Right side: '] = sider
 
     PTW.state['Co2 data: '] = content
     now = time.time()
