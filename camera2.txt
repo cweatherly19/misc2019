@@ -1,4 +1,2 @@
 /usr/src/mjpg-streamer/mjpg-streamer-experimental/mjpg_streamer -i "input_uvc.so -r 640x480 -d /dev/video3 -n" -o "output_http.so -w /usr/src/mjpg-streamer/mjpg-streamer-experimental/www -p 8040" &
-
-
-/usr/src/mjpg-streamer/mjpg-streamer-experimental/mjpg_streamer -i "input_uvc.so -r 640x480 -d /dev/video4 -n" -o "output_http.so -w /usr/src/mjpg-streamer/mjpg-streamer-experimental/www -p 8060" &
+/usr/src/mjpg-streamer/mjpg-streamer-experimental/mjpg_streamer -i "input_uvc.so -r 640x480 -d /dev/video4 -n" -o "output_http.so -w /usr/src/mjpg-streamer/mjpg-streamer-experimental/www -p 8050" &
