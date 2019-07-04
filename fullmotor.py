@@ -5,8 +5,7 @@ x = d_two #starting x value
 y = d_one #starting y value
 z = 0.0 #starting z value
 
-gopen = 1
-gclose = 1
+gopen = gclose = 1
 
 speed = 1 #starting speed (whole number between 1 and 4)
 
