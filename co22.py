@@ -19,7 +19,7 @@ average = [ ]
 content = 0
 
 base = RPL.analogRead(co)
-
+now = RPL.analogRead(co)
 # ^ setup
 
 # begins by averaging the first 1000 readings in order to get a base reading
