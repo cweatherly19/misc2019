@@ -1,5 +1,5 @@
-d_one = 62.0 #distance from shoulder to elbow
-d_two = 48.0 #distance from elbow to wrist
+d_one = 22.5 #distance from shoulder to elbow
+d_two = 23.0 #distance from elbow to wrist
 
 x = d_two #starting x value
 y = d_one #starting y value
@@ -17,11 +17,11 @@ def test(): #function for angle domains
 
 import math #to calculate all angle values and error
 try: #if not connected to a RoboPi, it can still run
-    import RoboPiLib_pwm as RPL #to pull all files needed to run the motors
-    RPL.RoboPiInit("/dev/ttyAMA0", 115200) #connect to RoboPi
+    from bsmLib import RPL #to pull all files needed to run the motors
+    RPL.init() #connect to RoboPi
 
-    elbow_motor_speed = 200
-    shoulder_motor_speed = 500
+    elbow_motor_speed = 300
+    shoulder_motor_speed = 300
 
     distance_of_error = 3 #max distance arm can be away from intended point
 
