@@ -11,27 +11,12 @@
 import RoboPiLib as RPL
 import setup
 import post_to_web as PTW
-import time, math
+import time
 
 pi = True
 co = 6
 average = [ ]
 content = 0
-
-fr = 2
-fl = 1
-sl = 0
-sr = 3
-
-frontr = RPL.analogRead(fr)
-frontl = RPL.analogRead(fl)
-sidel = RPL.analogRead(sl)
-sider = RPL.analogRead(sr)
-
-start = time.time()
-now = time.time()
-
-PTW.state['Start Time:'] = time.asctime(time.localtime())
 
 base = RPL.analogRead(co)
 
@@ -41,29 +26,13 @@ base = RPL.analogRead(co)
 
 while now - start < 1080:
 
-    content = RPL.analogRead(co)
-
-    frontr = RPL.analogRead(fr)
-    frontl = RPL.analogRead(fl)
-    sidel = RPL.analogRead(sl)
-    sider = RPL.analogRead(sr)
-
     if base - content >= 5:
-        PTW.state['CO2detect: Life possible'] = True
+        PTW.state['CO2detect: Life possible'] = content
     elif base - content >= 15:
-        PTW.state['CO2detect: Life certain'] = True
+        PTW.state['CO2detect: Life certain'] = content
     else:
-        PTW.state['CO2detect: No life detected'] = True
+        PTW.state['CO2detect: No life detected'] = content
 
-    PTW.state['Front right: '] = frontr
-    PTW.state['Front left: '] = frontl
-    PTW.state['Left side: '] = sidel
-    PTW.state['Right side: '] = sider
 
-    PTW.state['Co2 data: '] = content
-    now = time.time()
-    minutes, seconds = divmod((now - start), 60)
-    PTW.state['Minutes: '] = minutes
-    PTW.state['Seconds: '] = round(seconds, 1)
 
     PTW.post()

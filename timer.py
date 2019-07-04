@@ -10,7 +10,7 @@ now = time.time()
 
 PTW.state['Start Time:'] = time.asctime(time.localtime())
 
-while now - start < 1080:
+while now - start < 1500:
     now = time.time()
     minutes, seconds = divmod((now - start), 60)
     if minutes >=3:
@@ -19,3 +19,5 @@ while now - start < 1080:
     PTW.state['Seconds: '] = round(seconds, 1)
 
     PTW.post()
+
+PTW.state['Mission Complete.']
