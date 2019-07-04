@@ -31,11 +31,11 @@ print base
 while True:
     content = RPL.analogRead(pin)
     if base - content >= 3:
-        PTW.state['CO2detect: '] = "Life possible"
+        PTW.state['CO2detect: '] = "Life possible - %i" % content
     elif base - content >= 15:
-        PTW.state['CO2detect: Life certain'] = content
+        PTW.state['CO2detect: '] = "Life certain - %i" % content
     else:
-        PTW.state['CO2detect: No life detected'] = content
+        PTW.state['CO2detect: '] = "No life detected - %i" % content
 
 
 
