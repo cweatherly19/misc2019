@@ -20,7 +20,7 @@ average = [ ]
 base = RPL.analogRead(pin)
 
 while len(average) < 50:
-    content = RPL.analogRead(co)
+    content = RPL.analogRead(pin)
     average.append(content)
 
 
