@@ -24,9 +24,9 @@ now = RPL.analogRead(co)
 
 # begins by averaging the first 1000 readings in order to get a base reading
 
-while now - start < 1080:
+while True:
 
-    if base - content >= 5:
+    if base - content >= 3:
         PTW.state['CO2detect: Life possible'] = content
     elif base - content >= 15:
         PTW.state['CO2detect: Life certain'] = content
