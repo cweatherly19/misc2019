@@ -82,12 +82,12 @@ def key_reader():
     return x, y, z
 
 def motor_runner(x, y, z): #sends signals to all the motors based on potentiometer readings
-    x = math.sqrt(w ** 2 + y ** 2 + z ** 2) #the momentary length of the arm
+    w = math.sqrt(x ** 2 + y ** 2 + z ** 2) #the momentary length of the arm
 
-    a_elbow = round(abs(math.acos((d_one ** 2 + d_two ** 2 - x ** 2) / (2 * d_one * d_two)) - math.pi), 4) #the elbow angle
-    a_shoulder = round(math.acos((x ** 2 + d_one ** 2 - d_two ** 2) / (2 * d_one * x)) + math.acos(math.sqrt(w ** 2 + z ** 2) / w), 4) #the shoulder angle
+    a_elbow = round(abs(math.acos((d_one ** 2 + d_two ** 2 - w ** 2) / (2 * d_one * d_two)) - math.pi), 4) #the elbow angle
+    a_shoulder = round(math.acos((w ** 2 + d_one ** 2 - d_two ** 2) / (2 * d_one * w)) + math.acos(math.sqrt(x ** 2 + z ** 2) / w), 4) #the shoulder angle
     try:
-        a_swivel = round(math.atan(z / w) + math.pi / 2, 4) #the swivel angle
+        a_swivel = round(math.atan(z / x) + math.pi / 2, 4) #the swivel angle
     except:
         a_swivel = math.pi / 2 #the swivel angle when its angle doesn't matter
 
