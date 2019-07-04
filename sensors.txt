@@ -1,2 +1,2 @@
-sudo python co22.py
-sudo python timer.py
+sudo python co22.py &
+sudo python timer.py &
