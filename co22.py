@@ -13,19 +13,23 @@ import setup
 import post_to_web as PTW
 import time
 
-pi = True
-co = 6
-average = [ ]
+pin = 6
 content = 0
+i = 0
+average = [ ]
+base = RPL.analogRead(pin)
 
-base = RPL.analogRead(co)
-now = RPL.analogRead(co)
-# ^ setup
+while len(average) < 50:
+    content = RPL.analogRead(co)
+    average.append(content)
 
+
+base = sum(average) / len(average)
+print base
 # begins by averaging the first 1000 readings in order to get a base reading
 
 while True:
-
+    content = RPL.analogRead(pin)
     if base - content >= 3:
         PTW.state['CO2detect: Life possible'] = content
     elif base - content >= 15:
